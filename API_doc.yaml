@@ -1,0 +1,777 @@
+swagger: "2.0"
+info:
+  description: "This contains availables API endpoints for tree family"
+  version: "1.0.0"
+  title: "Tree Family API documentation"
+host: "localhost:4000"
+basePath: "/api/v1/"
+schemes:
+- "http"
+paths:
+  /user:
+    post:
+      tags: 
+      - User
+      summary: Create a new user
+      produces:
+      - application/json
+      consumes:
+      - application/json
+      parameters:
+      - $ref: "#/parameters/userProfile"
+      responses:
+        "200":
+          description: User is successfully created!
+          schema:
+           $ref: "#/definitions/userResponse"
+        "400":
+          description: Request invalid
+          schema:
+           $ref: "#/definitions/Error"
+    get:
+      tags:
+      - User
+      summary: "Get user profile"
+      produces:
+      - application/json
+      security:
+      - Bearer: []
+      parameters:
+      - $ref: "#/parameters/authorization"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+           $ref: "#/definitions/userResponse"
+        "401":
+          description: invalid jwt
+          schema:
+            $ref: "#/definitions/Unauthorized"
+        "400":
+          description: Request invalid
+          schema:
+           $ref: "#/definitions/Error"
+    put:
+      tags: 
+      - User
+      summary: Upadate user profile
+      security:
+      - Bearer: []
+      produces:
+      - application/json
+      consumes:
+      - application/json
+      parameters:
+      - $ref: "#/parameters/authorization"
+      - $ref: "#/parameters/userProfile"
+      responses:
+        "200":
+          description: User is successfully updated!
+          schema:
+           $ref: "#/definitions/userResponse"
+        "401":
+          description: jwt invalid
+          schema:
+            $ref: "#/definitions/Unauthorized"
+        "400":
+          description: Request invalid
+          schema:
+           $ref: "#/definitions/Error"
+    delete:
+      tags: 
+      - User
+      summary: Delete user account
+      security:
+      - Bearer: []
+      produces:
+      - application/json
+      parameters:
+      - $ref: "#/parameters/authorization"
+      responses:
+        "200":
+          description: User is successfully deleted!
+          schema:
+           $ref: "#/definitions/deleteResponse"
+        "401":
+          description: jwt invalid
+          schema:
+            $ref: "#/definitions/Unauthorized"
+        "400":
+          description: Request invalid
+          schema:
+           $ref: "#/definitions/Error"
+  /user/login:
+    post:
+      tags: 
+      - User
+      summary: Login
+      produces:
+      - application/json
+      consumes:
+      - application/json
+      parameters:
+      - name: User login
+        in: body
+        description: Login to tree family
+        schema:
+          type: object
+          required:
+            - userName
+            - password
+          properties:
+            username:
+              type: string
+              example : Liam
+            password:
+              type: string
+              example : 1234
+      responses:
+        "200":
+          description: User is successfully logged in!
+          schema:
+           type: object
+           description: user token
+           properties:
+            status: 
+              type: number
+              example: 200
+            message:
+              type: string
+              example: User is successfully logged in!!
+            body:
+              type: object
+              properties:
+                token:
+                  type: string
+        "400":
+          description: Request invalid
+          schema:
+           $ref: "#/definitions/Error"
+  /user/reset-password:
+    post:
+      tags:
+      - User
+      summary: verify user email
+      description: get the user id
+      produces:
+      - application/json
+      consumes:
+      - application/json
+      parameters:
+      - name: email
+        in: body
+        schema:
+          type: object
+          properties:
+            email:
+              type: string
+      responses:
+        "200":
+          description: operation successful
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+                example: 200
+              message:
+                type: string
+                example: email verified!
+              body:
+                type: object
+                properties:
+                  id: 
+                    type: string
+        "400":
+          description: Request invalid
+          schema:
+           $ref: "#/definitions/Error"
+    put:
+      tags:
+      - User
+      summary: update password
+      produces:
+      - application/json
+      consumes:
+      - application/json
+      parameters:
+      - name: password
+        in: body
+        schema:
+          type: object
+          properties:
+            password:
+              type: string
+            id:
+              type: string
+      responses:
+        "200":
+          description: password successfully updated
+          schema:
+            $ref: "#/definitions/userResponse"
+        "400":
+          description: Request invalid
+          schema:
+           $ref: "#/definitions/Error"
+      
+  /tree:
+    post:
+      tags:
+      - Tree Family
+      summary: Create a new tree family
+      security:
+      - Bearer: []
+      produces: 
+      - application/json
+      consumes:
+      - application/json
+      parameters:
+      - $ref: "#/parameters/authorization"
+      - $ref: "#/parameters/treeInfos"
+      responses:
+        "200":
+          description: Tree is successfully created
+          schema:
+            $ref: "#/definitions/treeResponse"
+        "401":
+          description: invalid jwt
+          schema:
+            $ref: "#/definitions/Unauthorized"
+        "400":
+          description: Request invalid
+          schema:
+            $ref: "#/definitions/Error"
+    get:
+      tags:
+      - Tree Family
+      summary: Get information of tree family
+      security:
+      - Bearer: []
+      produces:
+      - application/json
+      parameters:
+      - $ref: "#/parameters/authorization"
+      responses:
+        "200":
+          description: Tree information is successfully got!
+          schema:
+            $ref: "#/definitions/treeResponse"
+        "401":
+          description: invalid jwt
+          schema:
+            $ref: "#/definitions/Unauthorized"
+        "400":
+          description: Request invalid
+          schema:
+            $ref: "#/definitions/Error"
+    put:
+      tags: 
+      - Tree Family
+      summary: Update the tree information
+      security:
+      - Bearer: []
+      produces:
+      - application/json
+      consumes:
+      - application/json
+      parameters:
+      - $ref: "#/parameters/authorization"
+      - name: Tree Update
+        in: body
+        schema:
+          type: object
+          properties:
+            owner:
+              type: string
+      responses:
+        "200":
+          description: Tree information is successfully got!
+          schema:
+            $ref: "#/definitions/treeResponse"
+        "401":
+          description: invalid jwt
+          schema:
+            $ref: "#/definitions/Unauthorized"
+        "400":
+          description: Request invalid
+          schema:
+            $ref: "#/definitions/Error"
+    delete:
+      tags:
+      - Tree Family
+      summary: Delete tree family
+      security:
+      - Bearer: []
+      produces:
+      - application/json
+      parameters:
+      - $ref: "#/parameters/authorization"
+      responses:
+        "200":
+          description: Tree is successfully deleted!
+          schema:
+            $ref: "#/definitions/deleteResponse"
+        "401":
+          description: invalid jwt
+          schema:
+            $ref: "#/definitions/Unauthorized"
+        "400":
+          description: Request invalid
+          schema:
+            $ref: "#/definitions/Error"
+  /member:
+    post:
+      tags:
+      - Member
+      summary: create a new member in a tree family
+      security:
+      - Bearer: []
+      produces:
+      - application/json
+      consumes:
+      - application/json
+      parameters:
+      - $ref: "#/parameters/authorization"
+      - $ref: "#/parameters/memberProfile"
+      responses:
+        "200":
+          description: A member is succesfully created!
+          schema:
+            $ref: "#/definitions/memberResponse"
+        "401":
+          description: invalid jwt
+          schema:
+            $ref: "#/definitions/Unauthorized"
+        "400":
+          description: Request invalid
+          schema:
+            $ref: "#/definitions/Error"
+    get:
+      tags:
+      - Member
+      summary: get all members profile of tree
+      security:
+      - Bearer: []
+      produces:
+      - application/json
+      parameters:
+      - $ref: "#/parameters/authorization"
+      responses:
+        "200":
+          description: all members profile are successfully got!
+          schema:
+            $ref: "#/definitions/allMemberResponse"
+        "401":
+          description: invalid jwt
+          schema:
+            $ref: "#/definitions/Unauthorized"
+        "400":
+          description: Request invalid
+          schema:
+            $ref: "#/definitions/Error"
+  /member/{id}:
+    get:
+      tags:
+      - Member
+      summary: Get member profile by id
+      security:
+      - Bearer: []
+      produces:
+      - application/json
+      parameters:
+      - $ref: "#/parameters/authorization"
+      - name: id
+        in: path
+        description: member id
+        type: string
+        required: true
+      responses:
+        "200":
+          description: all members profile are successfully got!
+          schema:
+            $ref: "#/definitions/memberResponse"
+        "401":
+          description: invalid jwt
+          schema:
+            $ref: "#/definitions/Unauthorized"
+        "400":
+          description: Request invalid
+          schema:
+            $ref: "#/definitions/Error"
+    put:
+      tags:
+      - Member
+      summary: Get member profile by id
+      security:
+      - Bearer: []
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: member id
+        type: string
+        required: true
+      - $ref: "#/parameters/authorization"
+      - $ref: "#/parameters/memberProfile"
+      responses:
+        "200":
+          description: member profile are successfully got!
+          schema:
+            $ref: "#/definitions/memberResponse"
+        "401":
+          description: invalid jwt
+          schema:
+            $ref: "#/definitions/Unauthorized"
+        "400":
+          description: Request invalid
+          schema:
+            $ref: "#/definitions/Error"
+    delete:
+      tags:
+      - Member
+      summary: Delete a member from tree family by id
+      security:
+      - Bearer: []
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: member id
+        type: string
+        required: true
+      - $ref: "#/parameters/authorization"
+      responses:
+        "200":
+          description: member is successfully deleted from tree family!
+          schema:
+            $ref: "#/definitions/memberResponse"
+        "401":
+          description: invalid jwt
+          schema:
+            $ref: "#/definitions/Unauthorized"
+        "400":
+          description: Request invalid
+          schema:
+            $ref: "#/definitions/Error"
+securityDefinitions:
+  Bearer:
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
+    description: >-
+      Enter the token with the `Bearer: ` prefix, e.g. "Bearer abcde12345".
+definitions:
+  user:
+    type: object
+    properties:
+      id:
+        type: string
+      username:
+        type: string
+      password:
+        type: string
+      email:
+        type: string
+        format: email
+      phoneNumber:
+        type: string
+      photo:
+        type: string
+      createdAt:
+        type: string
+        format: date
+        example: 2024-04-01T12:15:10.716Z
+      updatedAt:
+        type: string
+        format: date
+        example: 2024-04-01T12:15:10.716Z
+  tree:
+    type: object
+    properties:
+      id:
+        type: string
+      owner:
+        type: string
+      familyName:
+        type: string
+      createdAt:
+        type: string
+        format: date
+        example: 2024-04-01T12:15:10.716Z
+      updatedAt:
+        type: string
+        format: date
+        example: 2024-04-01T12:15:10.716Z  
+  member:
+    type: object
+    properties:
+      _id:
+        type: string
+      createdAt:
+        type: string
+        format: date
+        example: 2024-04-01T12:15:10.716Z
+      updatedAt:
+        type: string
+        format: date
+        example: 2024-04-01T12:15:10.716Z
+      firstName:
+        type: string
+      lastName:
+        type: string
+      birthday:
+        type: string
+        format: date
+      deathday:
+        type: string
+        format: date
+      placeOfBirth:
+        type: string
+      placeOfDeath:
+        type: string
+      sex:
+        type: string
+      photo:
+        type: string
+        example: https://s3.amazonaws.com/myphoto
+      biography:
+        type: string
+      parents:
+        type: array
+        items:
+          type: string
+      partners:
+        type: array
+        items:
+          type: string
+      childrens:
+        type: array
+        items:
+            type: string
+      tree:
+        type: string
+      _v:
+        type: number
+  userResponse:
+    type: object
+    properties:
+      status:
+        type: number
+        example: 200
+      message:
+        type: string
+      body:
+        $ref: "#/definitions/user"
+  treeResponse:
+    type: object
+    properties:
+      status:
+        type: number
+        example: 200
+      message:
+        type: string
+      body:
+        $ref: "#/definitions/tree"
+  memberResponse:
+    type: object
+    properties:
+      status:
+        type: number
+        example: 200
+      message:
+        type: string
+      body:
+        type: object
+        properties:
+          id:
+            type: string
+          createdAt:
+            type: string
+            format: date
+            example: 2024-04-01T12:15:10.716Z
+          updatedAt:
+            type: string
+            format: date
+            example: 2024-04-01T12:15:10.716Z
+          firstName:
+            type: string
+          lastName:
+            type: string
+          birthday:
+            type: string
+            format: date
+          deathday:
+            type: string
+            format: date
+          placeOfBirth:
+            type: string
+          placeOfDeath:
+            type: string
+          sex:
+            type: string
+          photo:
+            type: string
+            example: https://s3.amazonaws.com/myphoto
+          biography:
+            type: string
+          parents:
+            type: array
+            items:
+              type: string
+          partners:
+            type: array
+            items:
+              type: string
+          childrens:
+            type: array
+            items:
+                type: string
+          tree:
+            type: string
+  allMemberResponse:
+    type: object
+    properties:
+      status:
+        type: number
+        example: 200
+      message:
+        type: string
+      body:
+        type: object
+        properties:
+         members:
+          type: array
+          items: 
+            $ref: "#/definitions/member"
+  deleteResponse:
+    type: object
+    properties:
+      status:
+        type: number
+        example: 200
+      message:
+        type: string
+      body:
+        type: object
+        properties:
+          user:
+            $ref: "#/definitions/user"
+          tree:
+            $ref: "#/definitions/tree"
+          members:
+            type: array
+            items: 
+              $ref: "#/definitions/member"
+  Error:
+    type: object
+    properties:
+      status:
+        type: string
+        example: 400
+      message:
+        type: string
+  Unauthorized:
+    type: object
+    properties:
+      status: 
+        type: number
+        example: 401
+      message:
+        type: string
+        example: invalid signature
+parameters:
+  authorization:
+    name: Authorization
+    in: header
+    description: Attach Bearcher JWT token
+    required: true
+    type: string
+  userProfile:
+    name: user profile
+    in: body
+    schema:
+      type: object
+      required:
+      - userName
+      - email
+      - password
+      properties:
+        username:
+          type: string
+          example : Liam
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          example : 1234
+        phoneNumber:
+          type: string
+          example: 05698753589
+        photo:
+          type: string
+          example: https://s3.amazonaws.com/myphoto
+  treeInfos:
+    name: Tree
+    in: body
+    schema:
+      type: object
+      required:
+      - owner
+      properties:
+        owner:
+          type: string
+        familyName:
+          type: string
+  memberProfile:
+    name: user profile
+    in: body
+    schema:
+      type: object
+      required:
+      - sex
+      - firstName
+      - lastName
+      - tree
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        birthday:
+          type: string
+          format: date
+        deathday:
+          type: string
+          format: date
+        placeOfBirth:
+          type: string
+        placeOfDeath:
+          type: string
+        sex:
+          type: string
+        photo:
+          type: string
+          example: https://s3.amazonaws.com/myphoto
+        biography:
+          type: string
+        parents:
+          type: array
+          items:
+            type: string
+        partners:
+          type: array
+          items:
+            type: string
+        childrens:
+          type: array
+          items:
+              type: string
+        tree:
+          type: string
+          
+  
+
+    
