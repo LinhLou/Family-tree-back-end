@@ -10,9 +10,13 @@ const secretKey = process.env.SECRET_KEY || 'tree-family-ll';
 
 const createUser = async data => {
   try {
-    const user = await User.findOne({ username: data.username }) || await User.findOne({ email: data.email });
+    const user = await User.findOne({ email: data.email });
     if (user) {
-      throw new Error('User is already exist!');
+      throw new Error('email is already exist');
+    }
+
+    if(await User.findOne({ username: data.username })){
+      throw new Error('username is already exist');
     }
 
     const hashPassword = await bcrypt.hash(data.password, 12);
