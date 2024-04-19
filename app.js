@@ -1,16 +1,16 @@
-import dotEnv from 'dotenv';
+// import dotEnv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import dbconnecxion from './database/connexion.js';
 import userRoutes from './routes/userRoutes.js';
 import treeRoutes from './routes/treeRoutes.js';
 import memberRoutes from './routes/memberRoutes.js';
+import config from './config.js';
 
-dotEnv.config();
+// dotEnv.config();
 dbconnecxion();
 
-
-const Port = process.env.SERVER_PORT || 3000;
+const Port = config.port || 3000;
 
 const app = express();
 

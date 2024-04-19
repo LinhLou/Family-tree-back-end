@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+import config from "../config.js";
 
-const databaseURL = process.env.DATABASE_URL || "mongodb://localhost:27017/tree_family";
+const databaseURL = config.database || "mongodb://localhost:27017/tree_family";
 
 const connection = async () => {
   try {
