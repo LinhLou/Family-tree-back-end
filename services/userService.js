@@ -2,6 +2,7 @@ import User from '../database/models/userModel.js';
 import Tree from '../database/models/treeModel.js';
 import Member from '../database/models/memberModel.js';
 import { getUserIdFromToken } from '../scripts/getUserInfosFromToken.js';
+import sendLink from '../scripts/sendLinkToResetPassword.js';
 
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
@@ -140,7 +141,12 @@ const verifyUserEmail = async data => {
     if (!user) {
       throw new Error('email is inexist!');
     }
+    const info = await sendLink();
+    if(!info){
+      throw new Error('send mail problem')
+    }
     return { id: user._id };
+
   } catch (error) {
     console.log('Error in resetPassword in userService.js');
     throw new Error(error.message);
