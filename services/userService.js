@@ -39,12 +39,12 @@ const loginUser = async data => {
   try {
     const user = await User.findOne({ username: data.username });
     if (!user) {
-      throw new Error('Username is incorrect!');
+      throw new Error('username is incorrect!');
     }
 
     const isValid = await bcrypt.compare(data.password, user.password);
     if (!isValid) {
-      throw new Error('Password is invalid!');
+      throw new Error('password is invalid!');
     }
 
     const token = jwt.sign(
