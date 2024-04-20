@@ -11,7 +11,7 @@ router.get('/', tokenValidation, userController.getUserProfile);
 router.put('/', tokenValidation, userController.updateUserProfile);
 router.delete('/', tokenValidation, userController.deleteUser);
 router.post('/verify-email', userController.verifyUserEmail);
-router.put('/reset-password', userController.resetUserPassword);
+router.put('/reset-password',tokenValidation, userController.resetUserPassword);
 
 
 export default router;

@@ -102,12 +102,12 @@ const verifyUserEmail = async (req,res)=>{
 const resetUserPassword = async (req,res)=>{
   let response = {};
   try {
-    const responseFromService = await userService.resetUserPassword(req.body);
+    const responseFromService = await userService.resetUserPassword(req);
     response.status = 200;
     response.message = "Password is successfully reset!";
     response.body = responseFromService;
   } catch (error) {
-    console.log('Error in verifyUserPassword in userController.js');
+    console.log('Error in resetUserPassword in userController.js');
     response.status = 400;
     response.message = error.message;
   }

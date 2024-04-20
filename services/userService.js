@@ -141,12 +141,18 @@ const verifyUserEmail = async data => {
     if (!user) {
       throw new Error('email is inexist!');
     }
-    const info = await sendLink();
+    const token = jwt.sign(
+      { id: user._id },
+      secretKey,
+      { expiresIn: '1d' }
+    );
+
+    const info = await sendLink(user.email, token);
     if(!info){
       throw new Error('send mail problem')
     }
-    return { id: user._id };
 
+    return { token };
   } catch (error) {
     console.log('Error in resetPassword in userService.js');
     throw new Error(error.message);
@@ -155,16 +161,13 @@ const verifyUserEmail = async data => {
 
 const resetUserPassword = async data => {
   try {
-
-    const hashPassword = await bcrypt.hash(data.password, 12);
-    console.log(hashPassword);
-    const updatedUser = await User.findOneAndUpdate({ _id: data.id }, { password: hashPassword }, { new: true });
-
+    const { userId } = getUserIdFromToken(data);
+    const hashPassword = await bcrypt.hash(data.body.password, 12);
+    const updatedUser = await User.findOneAndUpdate({ _id: userId }, { password: hashPassword }, { new: true });
     return updatedUser.toObject();
-
   } catch (error) {
     console.log('Error in resetPassword in userService.js');
-    throw new Error(error);
+    throw new Error(error.message);
   }
 };
 
