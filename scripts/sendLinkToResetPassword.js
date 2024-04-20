@@ -11,22 +11,22 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-let message = {
-  from: 'LinhLou👻" <linhlou@outlook.fr>', // sender address
-  to: "dang.tn.linh@gmail.com, linhlou@outlook.fr", // list of receivers
-  subject: "Hello ✔", // Subject line
-  text: "Sending with nodejs", // plain text body
-  html: `Here the link to reset your password Test:
-  <a href= "${config.endpoint}/user" >Lien to Facebook</a>
-  `, // html body
-};
 
-export default async function sendLink() {
+export default async function sendLink(email, token) {
+  const message = {
+    from: 'LinhLou👻" <linhlou@outlook.fr>', // sender address
+    to: `${email}`, // list of receivers
+    subject: "Hello ✔", // Subject line
+    text: "Sending with nodejs", // plain text body
+    html: `Here is the link to reset your password:
+    <a href= "${config.appURL}/reset-password/${token}" >Reset your password</a>
+    `, // html body
+  };
   try {
     // const info = await transporter.sendMail(message);
     const info = await transporter.sendMail(message);
-    return info
+    return info;
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 }
