@@ -6,7 +6,7 @@ This codebase contains the code needed to run the backend for Arbre Familiable p
 
 ### Prerequisites
 
-Arbre Familiable uses the following tech stack:
+Arbre Familiale uses the following tech stack:
 
 - Node.js v20
 - MongoDB 
