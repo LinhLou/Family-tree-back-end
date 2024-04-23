@@ -1,8 +1,8 @@
 swagger: "2.0"
 info:
-  description: "This contains availables API endpoints for tree family"
+  description: "This contains availables API endpoints for family tree"
   version: "1.0.0"
-  title: "Tree Family API documentation"
+  title: "Family Tree API documentation"
 host: "localhost:4000"
 basePath: "/api/v1/"
 schemes:
@@ -148,53 +148,18 @@ paths:
           schema:
            $ref: "#/definitions/Error"
   /user/reset-password:
-    post:
-      tags:
-      - User
-      summary: verify user email
-      description: get the user id
-      produces:
-      - application/json
-      consumes:
-      - application/json
-      parameters:
-      - name: email
-        in: body
-        schema:
-          type: object
-          properties:
-            email:
-              type: string
-      responses:
-        "200":
-          description: operation successful
-          schema:
-            type: object
-            properties:
-              status:
-                type: number
-                example: 200
-              message:
-                type: string
-                example: email verified!
-              body:
-                type: object
-                properties:
-                  id: 
-                    type: string
-        "400":
-          description: Request invalid
-          schema:
-           $ref: "#/definitions/Error"
     put:
       tags:
       - User
       summary: update password
+      security:
+      - Bearer: []
       produces:
       - application/json
       consumes:
       - application/json
       parameters:
+      - $ref: "#/parameters/authorization"
       - name: password
         in: body
         schema:
@@ -202,23 +167,67 @@ paths:
           properties:
             password:
               type: string
-            id:
-              type: string
       responses:
         "200":
           description: password successfully updated
           schema:
             $ref: "#/definitions/userResponse"
+        "401":
+          description: invalid jwt
+          schema:
+            $ref: "#/definitions/Unauthorized"
         "400":
           description: Request invalid
           schema:
            $ref: "#/definitions/Error"
-      
+  /user/verify-email:
+    post:
+      tags:
+      - User
+      summary: verify email
+      produces:
+      - application/json
+      consumes:
+      - application/json
+      parameters:
+      - name: verify email
+        in: body
+        description: verify if email is correct and registered in the database
+        schema:
+          type: object
+          required:
+            - email
+          properties:
+            email:
+              type: string
+              example : example@gm.com
+      responses:
+        "200":
+          description: address email is successfully verified!
+          schema:
+           type: object
+           description: user token
+           properties:
+            status: 
+              type: number
+              example: 200
+            message:
+              type: string
+              example: Email verified!!!
+            body:
+              type: object
+              properties:
+                token:
+                  type: string
+        "400":
+          description: Request invalid
+          schema:
+           $ref: "#/definitions/Error"
   /tree:
     post:
       tags:
-      - Tree Family
-      summary: Create a new tree family
+      - Family Tree
+      summary: Create a new family tree
       security:
       - Bearer: []
       produces: 
@@ -243,8 +252,8 @@ paths:
             $ref: "#/definitions/Error"
     get:
       tags:
-      - Tree Family
-      summary: Get information of tree family
+      - Family Tree
+      summary: Get information of family tree
       security:
       - Bearer: []
       produces:
@@ -266,7 +275,7 @@ paths:
             $ref: "#/definitions/Error"
     put:
       tags: 
-      - Tree Family
+      - Family Tree
       summary: Update the tree information
       security:
       - Bearer: []
@@ -298,8 +307,8 @@ paths:
             $ref: "#/definitions/Error"
     delete:
       tags:
-      - Tree Family
-      summary: Delete tree family
+      - Family Tree
+      summary: Delete a family tree
       security:
       - Bearer: []
       produces:
@@ -323,7 +332,7 @@ paths:
     post:
       tags:
       - Member
-      summary: create a new member in a tree family
+      summary: create a new member in a family tree
       security:
       - Bearer: []
       produces:
@@ -430,7 +439,7 @@ paths:
     delete:
       tags:
       - Member
-      summary: Delete a member from tree family by id
+      summary: Delete a member from family tree by id
       security:
       - Bearer: []
       produces:
